@@ -1822,6 +1822,24 @@
     ]
   },
   {
+    "name": "Aniyomi: Gogoanime",
+    "pkg": "eu.kanade.tachiyomi.animeextension.en.gogoanime",
+    "apk": "aniyomi-en.gogoanime-v14.1.apk",
+    "lang": "en",
+    "code": 1,
+    "version": "14.1",
+    "nsfw": 0,
+    "sources": [
+      {
+        "name": "Gogoanime",
+        "lang": "en",
+        "id": "7055547649318749672",
+        "baseUrl": "https://gogoanime.by",
+        "versionId": 1
+      }
+    ]
+  },
+  {
     "name": "Aniyomi: haho.moe",
     "pkg": "eu.kanade.tachiyomi.animeextension.en.hahomoe",
     "apk": "aniyomi-en.hahomoe-v14.10.apk",
