@@ -11,8 +11,6 @@ import okhttp3.Request
 import okhttp3.Response
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class Gogoanime : AnimeHttpSource() {
 
@@ -23,8 +21,7 @@ class Gogoanime : AnimeHttpSource() {
 
     // ======================== Popular ========================
 
-    override fun popularAnimeRequest(page: Int): Request =
-        GET("$baseUrl/popular.html?page=$page", headers)
+    override fun popularAnimeRequest(page: Int): Request = GET("$baseUrl/popular.html?page=$page", headers)
 
     override fun popularAnimeParse(response: Response): AnimesPage {
         val doc = response.asJsoup()
@@ -41,8 +38,7 @@ class Gogoanime : AnimeHttpSource() {
 
     // ======================== Latest ========================
 
-    override fun latestUpdatesRequest(page: Int): Request =
-        GET("$baseUrl/?page=$page", headers)
+    override fun latestUpdatesRequest(page: Int): Request = GET("$baseUrl/?page=$page", headers)
 
     override fun latestUpdatesParse(response: Response): AnimesPage {
         val doc = response.asJsoup()
@@ -59,8 +55,7 @@ class Gogoanime : AnimeHttpSource() {
 
     // ======================== Search ========================
 
-    override fun searchAnimeRequest(page: Int, query: String, filters: AnimeFilterList): Request =
-        GET("$baseUrl/search.html?keyword=${query.trim()}&page=$page", headers)
+    override fun searchAnimeRequest(page: Int, query: String, filters: AnimeFilterList): Request = GET("$baseUrl/search.html?keyword=${query.trim()}&page=$page", headers)
 
     override fun searchAnimeParse(response: Response): AnimesPage {
         val doc = response.asJsoup()
@@ -94,19 +89,16 @@ class Gogoanime : AnimeHttpSource() {
 
     // ======================== Episodes ========================
 
-    override fun episodeListRequest(anime: SAnime): Request =
-        GET(baseUrl + anime.url, headers)
+    override fun episodeListRequest(anime: SAnime): Request = GET(baseUrl + anime.url, headers)
 
     override fun episodeListParse(response: Response): List<SEpisode> {
         val doc = response.asJsoup()
 
-        // Get episode range from the hidden input fields
         val animeId = doc.select("#movie_id").attr("value")
         val epStart = doc.select("#episode_page li a").first()?.attr("ep_start") ?: "0"
         val epEnd = doc.select("#episode_page li a").last()?.attr("ep_end") ?: "0"
         val alias = doc.select("#alias_anime").attr("value")
 
-        // Fetch full episode list from the ajax endpoint
         val ajaxUrl = "https://ajax.gogo-load.com/ajax/load-list-episode" +
             "?ep_start=$epStart&ep_end=$epEnd&id=$animeId&default_ep=0&alias=$alias"
         val ajaxResponse = client.newCall(GET(ajaxUrl, headers)).execute()
@@ -124,22 +116,18 @@ class Gogoanime : AnimeHttpSource() {
 
     // ======================== Video ========================
 
-    override fun videoListRequest(episode: SEpisode): Request =
-        GET(baseUrl + episode.url, headers)
+    override fun videoListRequest(episode: SEpisode): Request = GET(baseUrl + episode.url, headers)
 
     override fun videoListParse(response: Response): List<Video> {
         val doc = response.asJsoup()
         val videos = mutableListOf<Video>()
 
-        // Get the embed iframe source
         val iframeSrc = doc.select("div.play-video iframe").attr("src")
         if (iframeSrc.isBlank()) return emptyList()
 
-        // Fetch embed page to extract the actual stream URL
         val embedResponse = client.newCall(GET(iframeSrc, headers)).execute()
         val embedDoc = embedResponse.asJsoup()
 
-        // Extract m3u8 / mp4 from script tags
         val scriptData = embedDoc.select("script").map { it.data() }
             .firstOrNull { it.contains("sources") } ?: ""
 
