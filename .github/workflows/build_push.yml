@@ -83,8 +83,8 @@ jobs:
       - id: generate-matrices
         name: Create output matrices
         run: |
-          python ./.github/scripts/generate-build-matrices.py "$NX_BASE" Release
-
+          python ./.github/scripts/generate-build-matrices.py "4b825dc642cb6eb9a060e54bf8d69288fbee4904" Release
+          
   build:
     name: Build extensions (${{ matrix.chunk.number }})
     needs: prepare
