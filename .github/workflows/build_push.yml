@@ -168,6 +168,13 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Debug artifact location
+        run: |
+         echo "Home dir contents:"
+         ls ~/apk-artifacts || echo "~/apk-artifacts NOT FOUND"
+         echo "Current dir: $(pwd)"
+         ls
+
       - name: Create repo artifacts
         run: |
           cd ${{ github.ref_name }}
