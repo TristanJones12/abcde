@@ -1,0 +1,26 @@
+apply plugin: 'com.android.application'
+
+ext {
+    extName = 'Gogoanime'
+    pkgNameSuffix = 'en.gogoanime'
+    extClass = '.Gogoanime'
+    extVersionCode = 1
+    containsNsfw = false
+}
+
+android {
+    namespace "eu.kanade.tachiyomi.animeextension.en.gogoanime"
+    compileSdk 36
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 36
+        applicationId "eu.kanade.tachiyomi.animeextension.en.gogoanime"
+        versionCode extVersionCode
+        versionName "1.0.0"
+    }
+}
+
+dependencies {
+    compileOnly libs.bundles.common
+}
